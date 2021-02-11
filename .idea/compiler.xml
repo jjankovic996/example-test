@@ -16,10 +16,6 @@
         <module name="business-model" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="bussiness-model" target="15" />
-      <module name="db" target="15" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
