@@ -9,5 +9,6 @@ public interface UserRepository {
     Boolean doesUserExistByUsername(String username);
 
     Boolean doesUserExistByEmail(String email);
+
     UserBM  save(UserBM userBM);
 }

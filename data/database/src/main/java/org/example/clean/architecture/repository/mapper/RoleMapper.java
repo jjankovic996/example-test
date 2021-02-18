@@ -1,9 +1,9 @@
-package org.example.clean.architecture.persistence.mapper;
+package org.example.clean.architecture.repository.mapper;
 
 import org.example.clean.architecture.RoleBM;
 import org.example.clean.architecture.RoleTypeBM;
-import org.example.clean.architecture.persistence.model.Role;
-import org.example.clean.architecture.persistence.model.RoleType;
+import org.example.clean.architecture.repository.model.Role;
+import org.example.clean.architecture.repository.model.RoleType;
 import org.springframework.stereotype.Component;
 
 @Component

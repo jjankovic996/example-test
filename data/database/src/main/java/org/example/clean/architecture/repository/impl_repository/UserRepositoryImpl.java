@@ -1,11 +1,12 @@
-package org.example.clean.architecture.persistence.impl_repository;
+package org.example.clean.architecture.repository.impl_repository;
 
 import org.example.clean.architecture.UserBM;
-import org.example.clean.architecture.persistence.jpa_repository.UserRepositoryJPA;
-import org.example.clean.architecture.persistence.mapper.RoleMapper;
-import org.example.clean.architecture.persistence.mapper.UserMapper;
-import org.example.clean.architecture.persistence.model.Role;
-import org.example.clean.architecture.persistence.model.User;
+import org.example.clean.architecture.repository.jpa_repository.RoleRepositoryJPA;
+import org.example.clean.architecture.repository.jpa_repository.UserRepositoryJPA;
+import org.example.clean.architecture.repository.mapper.RoleMapper;
+import org.example.clean.architecture.repository.mapper.UserMapper;
+import org.example.clean.architecture.repository.model.Role;
+import org.example.clean.architecture.repository.model.User;
 import org.example.clean.architecture.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -47,7 +48,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public UserBM save(UserBM userBM) {
-        User user = userRepositoryJPA.save(userMapper.toUser(userBM));
+        User user = userMapper.toUser(userBM);
         Set<Role> roles = new HashSet<>();
 
         userBM.getRoles().forEach(roleBM -> {
@@ -56,7 +57,6 @@ public class UserRepositoryImpl implements UserRepository {
         });
 
         user.setRoles(roles);
-
         user = userRepositoryJPA.save(user);
 
         return userMapper.toUserBM(user);

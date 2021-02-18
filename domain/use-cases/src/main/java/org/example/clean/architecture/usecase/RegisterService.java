@@ -1,13 +1,11 @@
 package org.example.clean.architecture.usecase;
 
 import org.example.clean.architecture.RoleBM;
-import org.example.clean.architecture.RoleTypeBM;
 import org.example.clean.architecture.UserBM;
 import org.example.clean.architecture.exception.RegisterException;
 import org.example.clean.architecture.repository.RoleRepository;
 import org.example.clean.architecture.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,31 +31,36 @@ public class RegisterService implements RegisterUserCase{
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserBM register(String username, String password, Set<RoleBM> roles, String email) throws RegisterException {
-        if (userRepository.doesUserExistByUsername(username)) {
+    public UserBM register(UserBM userBM) throws RegisterException {
+        if (userRepository.doesUserExistByUsername(userBM.getUsername())) {
             throw new RegisterException("Username already exists");
         }
 
-        if (userRepository.doesUserExistByEmail(email)) {
+        if (userRepository.doesUserExistByEmail(userBM.getEmail())) {
             throw new RegisterException("Username already exists");
         }
 
 
-        UserBM user = new UserBM(username, email, passwordEncoder.encode(password));
+        UserBM user = new UserBM(userBM.getUsername(), userBM.getEmail(),
+                passwordEncoder.encode(userBM.getPassword()));
 
+        Set<RoleBM> roles = new HashSet<>();
 
-        if (roles == null) {
+        if (userBM.getRoles() == null) {
             RoleBM userRole = roleRepository.findByName(ROLE_USER.name());
             roles.add(userRole);
+            roleRepository.update(userRole);
         } else {
-            roles.forEach(role -> {
+            userBM.getRoles().forEach(role -> {
 
                 if (role.equals(ROLE_ADMIN.name())) {
                     RoleBM adminRole = roleRepository.findByName(ROLE_ADMIN.name());
                     roles.add(adminRole);
+                    roleRepository.update(adminRole);
                 }else{
                     RoleBM userRole = roleRepository.findByName(ROLE_USER.name());
                     roles.add(userRole);
+                    roleRepository.update(userRole);
                 }
 
             });

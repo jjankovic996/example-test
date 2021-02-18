@@ -1,10 +1,10 @@
-package org.example.clean.architecture.persistence.impl_repository;
+package org.example.clean.architecture.repository.impl_repository;
 
 import org.example.clean.architecture.RoleBM;
-import org.example.clean.architecture.persistence.jpa_repository.RoleRepositoryJPA;
-import org.example.clean.architecture.persistence.mapper.RoleMapper;
-import org.example.clean.architecture.persistence.model.Role;
-import org.example.clean.architecture.persistence.model.RoleType;
+import org.example.clean.architecture.repository.jpa_repository.RoleRepositoryJPA;
+import org.example.clean.architecture.repository.mapper.RoleMapper;
+import org.example.clean.architecture.repository.model.Role;
+import org.example.clean.architecture.repository.model.RoleType;
 import org.example.clean.architecture.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,5 +27,13 @@ public class RoleRepositoryImpl implements RoleRepository {
         Role role = roleRepositoryJPA.findByName(roleType).get();
 
         return  roleMapper.toRoleBM(role);
+    }
+
+    @Override
+    public RoleBM update(RoleBM roleBm) {
+        RoleBM roleUpdated = findByName(roleBm.getName().name());
+        Role role = roleRepositoryJPA.save(roleMapper.toRole(roleUpdated));
+
+        return roleMapper.toRoleBM(role);
     }
 }

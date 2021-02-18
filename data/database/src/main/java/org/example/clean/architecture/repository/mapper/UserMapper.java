@@ -1,7 +1,7 @@
-package org.example.clean.architecture.persistence.mapper;
+package org.example.clean.architecture.repository.mapper;
 
 import org.example.clean.architecture.UserBM;
-import org.example.clean.architecture.persistence.model.User;
+import org.example.clean.architecture.repository.model.User;
 import org.springframework.stereotype.Component;
 
 @Component

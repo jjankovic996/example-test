@@ -1,4 +1,4 @@
-package org.example.clean.architecture.persistence.model;
+package org.example.clean.architecture.repository.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +42,6 @@ public class User {
 
     @NotBlank
     @Size(max = 50)
-    @Email
     private String email;
 
     @NotBlank
@@ -50,7 +49,7 @@ public class User {
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles",
+    @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();

@@ -1,6 +1,6 @@
-package org.example.clean.architecture.persistence.jpa_repository;
+package org.example.clean.architecture.repository.jpa_repository;
 
-import org.example.clean.architecture.persistence.model.User;
+import org.example.clean.architecture.repository.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
