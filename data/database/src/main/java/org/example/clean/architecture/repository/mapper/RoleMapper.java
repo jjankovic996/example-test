@@ -24,7 +24,7 @@ public class RoleMapper {
     public Role toRole(RoleBM roleBM){
         Role role = new Role();
 
-        switch (role.getName()){
+        switch (roleBM.getName()){
             case ROLE_USER -> role.setName(RoleType.ROLE_USER);
             case ROLE_ADMIN -> role.setName(RoleType.ROLE_ADMIN);
             default -> throw new IllegalStateException("Unexpected value: " + role.getName());

@@ -18,14 +18,17 @@ import java.util.Set;
 public class UserRepositoryImpl implements UserRepository {
 
     private final UserRepositoryJPA userRepositoryJPA;
+    private final RoleRepositoryJPA roleRepositoryJPA;
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;
 
     @Autowired
     public  UserRepositoryImpl(UserRepositoryJPA userRepositoryJPA,
+                               RoleRepositoryJPA roleRepositoryJPA,
                                UserMapper userMapper,
                                RoleMapper roleMapper){
         this.userRepositoryJPA =userRepositoryJPA;
+        this.roleRepositoryJPA = roleRepositoryJPA;
         this.userMapper = userMapper;
         this.roleMapper = roleMapper;
     }
@@ -53,6 +56,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         userBM.getRoles().forEach(roleBM -> {
             Role role = roleMapper.toRole(roleBM);
+            role = roleRepositoryJPA.findByName(role.getName()).get();
             roles.add(role);
         });
 

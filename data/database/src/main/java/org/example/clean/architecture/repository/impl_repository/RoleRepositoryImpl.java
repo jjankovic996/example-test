@@ -23,17 +23,9 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     @Override
     public RoleBM findByName(String name) {
-        RoleType roleType = name == RoleType.ROLE_ADMIN.name() ? RoleType.ROLE_ADMIN: RoleType.ROLE_USER;
+        RoleType roleType = name.equals(RoleType.ROLE_ADMIN.name()) ? RoleType.ROLE_ADMIN: RoleType.ROLE_USER;
         Role role = roleRepositoryJPA.findByName(roleType).get();
 
         return  roleMapper.toRoleBM(role);
-    }
-
-    @Override
-    public RoleBM update(RoleBM roleBm) {
-        RoleBM roleUpdated = findByName(roleBm.getName().name());
-        Role role = roleRepositoryJPA.save(roleMapper.toRole(roleUpdated));
-
-        return roleMapper.toRoleBM(role);
     }
 }
