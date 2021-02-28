@@ -9,6 +9,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class UserBM {
+    private Long id;
     private String username;
     private String email;
     private String password;

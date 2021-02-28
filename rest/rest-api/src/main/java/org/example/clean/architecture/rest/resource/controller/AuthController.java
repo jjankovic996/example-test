@@ -1,7 +1,11 @@
 package org.example.clean.architecture.rest.resource.controller;
 
+import org.example.clean.architecture.JwtToken;
+import org.example.clean.architecture.rest.model.request.LoginRequest;
 import org.example.clean.architecture.rest.model.request.SignupRequest;
+import org.example.clean.architecture.rest.resource.mapper.LoginMapper;
 import org.example.clean.architecture.rest.resource.mapper.SignupMapper;
+import org.example.clean.architecture.usecase.AuthenticateUseCase;
 import org.example.clean.architecture.usecase.RegisterUserCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +22,19 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final RegisterUserCase registerUserCase;
+    private final AuthenticateUseCase authenticateUseCase;
     private final SignupMapper signupMapper;
+    private final LoginMapper loginMapper;
 
     @Autowired
-    public AuthController(RegisterUserCase registerUserCase, SignupMapper signupMapper) {
+    public AuthController(RegisterUserCase registerUserCase,
+                          AuthenticateUseCase authenticateUseCase,
+                          SignupMapper signupMapper,
+                          LoginMapper loginMapper) {
         this.registerUserCase = registerUserCase;
+        this.authenticateUseCase = authenticateUseCase;
         this.signupMapper = signupMapper;
+        this.loginMapper = loginMapper;
     }
 
     @GetMapping
@@ -32,7 +43,13 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) throws Exception{
+    public ResponseEntity<?> register(@Valid @RequestBody SignupRequest signUpRequest) throws Exception{
         return ResponseEntity.ok(registerUserCase.register(signupMapper.toUserBM(signUpRequest)));
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<?> authenticate(@Valid @RequestBody LoginRequest loginRequest) throws Exception{
+        JwtToken jwtToken = authenticateUseCase.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+        return ResponseEntity.ok(loginMapper.toLoginResponse(jwtToken));
     }
 }

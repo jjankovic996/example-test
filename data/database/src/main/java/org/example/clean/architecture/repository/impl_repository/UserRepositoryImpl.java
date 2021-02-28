@@ -3,16 +3,11 @@ package org.example.clean.architecture.repository.impl_repository;
 import org.example.clean.architecture.UserBM;
 import org.example.clean.architecture.repository.jpa_repository.RoleRepositoryJPA;
 import org.example.clean.architecture.repository.jpa_repository.UserRepositoryJPA;
-import org.example.clean.architecture.repository.mapper.RoleMapper;
 import org.example.clean.architecture.repository.mapper.UserMapper;
-import org.example.clean.architecture.repository.model.Role;
 import org.example.clean.architecture.repository.model.User;
 import org.example.clean.architecture.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class UserRepositoryImpl implements UserRepository {
@@ -20,17 +15,14 @@ public class UserRepositoryImpl implements UserRepository {
     private final UserRepositoryJPA userRepositoryJPA;
     private final RoleRepositoryJPA roleRepositoryJPA;
     private final UserMapper userMapper;
-    private final RoleMapper roleMapper;
 
     @Autowired
     public  UserRepositoryImpl(UserRepositoryJPA userRepositoryJPA,
                                RoleRepositoryJPA roleRepositoryJPA,
-                               UserMapper userMapper,
-                               RoleMapper roleMapper){
+                               UserMapper userMapper){
         this.userRepositoryJPA =userRepositoryJPA;
         this.roleRepositoryJPA = roleRepositoryJPA;
         this.userMapper = userMapper;
-        this.roleMapper = roleMapper;
     }
 
     @Override
@@ -52,15 +44,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public UserBM save(UserBM userBM) {
         User user = userMapper.toUser(userBM);
-        Set<Role> roles = new HashSet<>();
 
-        userBM.getRoles().forEach(roleBM -> {
-            Role role = roleMapper.toRole(roleBM);
-            role = roleRepositoryJPA.findByName(role.getName()).get();
-            roles.add(role);
+        user.getRoles().forEach(role -> {
+            roleRepositoryJPA.save(role);
+
         });
-
-        user.setRoles(roles);
         user = userRepositoryJPA.save(user);
 
         return userMapper.toUserBM(user);
