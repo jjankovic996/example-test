@@ -1,7 +1,7 @@
-package org.example.clean.architecture.rest.resource.mapper;
+package org.example.clean.architecture.rest.mapper;
 
 import org.example.clean.architecture.JwtToken;
-import org.example.clean.architecture.rest.model.response.LoginResponse;
+import org.example.clean.architecture.rest.response.LoginResponse;
 import org.springframework.stereotype.Component;
 
 @Component

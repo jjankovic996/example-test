@@ -1,10 +1,10 @@
-package org.example.clean.architecture.rest.resource.controller;
+package org.example.clean.architecture.rest.controller;
 
 import org.example.clean.architecture.JwtToken;
-import org.example.clean.architecture.rest.model.request.LoginRequest;
-import org.example.clean.architecture.rest.model.request.SignupRequest;
-import org.example.clean.architecture.rest.resource.mapper.LoginMapper;
-import org.example.clean.architecture.rest.resource.mapper.SignupMapper;
+import org.example.clean.architecture.rest.request.LoginRequest;
+import org.example.clean.architecture.rest.request.SignupRequest;
+import org.example.clean.architecture.rest.mapper.LoginMapper;
+import org.example.clean.architecture.rest.mapper.SignupMapper;
 import org.example.clean.architecture.usecase.AuthenticateUseCase;
 import org.example.clean.architecture.usecase.RegisterUserCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticate(@Valid @RequestBody LoginRequest loginRequest) throws Exception{
+    public ResponseEntity<?> authenticate(@Valid @RequestBody LoginRequest loginRequest) {
         JwtToken jwtToken = authenticateUseCase.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         return ResponseEntity.ok(loginMapper.toLoginResponse(jwtToken));
     }

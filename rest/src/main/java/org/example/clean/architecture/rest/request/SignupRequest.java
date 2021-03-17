@@ -1,4 +1,4 @@
-package org.example.clean.architecture.rest.model.request;
+package org.example.clean.architecture.rest.request;
 
 
 import lombok.Getter;

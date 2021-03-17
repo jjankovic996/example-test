@@ -1,9 +1,9 @@
-package org.example.clean.architecture.rest.resource.mapper;
+package org.example.clean.architecture.rest.mapper;
 
 import org.example.clean.architecture.RoleBM;
 import org.example.clean.architecture.RoleTypeBM;
 import org.example.clean.architecture.UserBM;
-import org.example.clean.architecture.rest.model.request.SignupRequest;
+import org.example.clean.architecture.rest.request.SignupRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -24,7 +24,7 @@ public class SignupMapper {
     private Set<RoleBM> toRoleBM(Set<String> roles){
         Set<RoleBM> roleBMS = new HashSet<>(roles.size());
         for (String role : roles){
-            RoleBM roleBM = new RoleBM(role.equals(RoleTypeBM.ROLE_USER)? RoleTypeBM.ROLE_USER : RoleTypeBM.ROLE_ADMIN);
+            RoleBM roleBM = new RoleBM(role.equals(RoleTypeBM.ROLE_USER.name())? RoleTypeBM.ROLE_USER : RoleTypeBM.ROLE_ADMIN);
             roleBMS.add(roleBM);
         }
 
