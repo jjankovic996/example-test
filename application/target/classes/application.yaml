@@ -1,7 +1,0 @@
-server:
-  port: 8090
-
-ca:
-  app:
-    jwtSecret: bezKoderSecretKey
-    jwtExpirationMs: 86400000
