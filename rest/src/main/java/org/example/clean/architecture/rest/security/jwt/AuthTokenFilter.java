@@ -1,8 +1,8 @@
-package org.example.clean.architecture.security.jwt;
+package org.example.clean.architecture.rest.security.jwt;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.clean.architecture.security.services.UserDetailsServiceImpl;
+import org.example.clean.architecture.rest.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

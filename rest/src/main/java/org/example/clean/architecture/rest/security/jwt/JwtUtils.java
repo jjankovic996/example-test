@@ -1,4 +1,4 @@
-package org.example.clean.architecture.security.jwt;
+package org.example.clean.architecture.rest.security.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -7,7 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
-import org.example.clean.architecture.security.services.UserDetailsImpl;
+import org.example.clean.architecture.rest.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;

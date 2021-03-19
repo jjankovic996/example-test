@@ -5,7 +5,7 @@ import org.example.clean.architecture.rest.request.LoginRequest;
 import org.example.clean.architecture.rest.request.SignupRequest;
 import org.example.clean.architecture.rest.mapper.LoginMapper;
 import org.example.clean.architecture.rest.mapper.SignupMapper;
-import org.example.clean.architecture.usecase.AuthenticateUseCase;
+import org.example.clean.architecture.rest.service.AuthenticateUseCase;
 import org.example.clean.architecture.usecase.RegisterUserCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

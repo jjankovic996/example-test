@@ -1,8 +1,8 @@
-package org.example.clean.architecture.usecase;
+package org.example.clean.architecture.rest.service;
 
 import org.example.clean.architecture.JwtToken;
-import org.example.clean.architecture.security.jwt.JwtUtils;
-import org.example.clean.architecture.security.services.UserDetailsImpl;
+import org.example.clean.architecture.rest.security.jwt.JwtUtils;
+import org.example.clean.architecture.rest.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

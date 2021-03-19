@@ -1,4 +1,4 @@
-package org.example.clean.architecture.security.jwt;
+package org.example.clean.architecture.rest.security.jwt;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

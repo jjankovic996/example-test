@@ -60,10 +60,8 @@ public class RegisterService implements RegisterUserCase{
         } else {
             requestRoles.forEach(roleRequest -> {
                 String roleType = roleRequest.getName().name();
-                System.out.println(roleType);
 
                 Role role = roleType.equals(RoleType.ROLE_ADMIN.name()) ? roleRepository.findById(1).get(): roleRepository.findById(2).get();
-                System.out.println(roleType.equals(RoleType.ROLE_ADMIN.name()));
                 roles.add(role);
             });
         }

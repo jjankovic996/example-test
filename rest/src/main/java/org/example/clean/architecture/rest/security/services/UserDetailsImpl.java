@@ -1,4 +1,4 @@
-package org.example.clean.architecture.security.services;
+package org.example.clean.architecture.rest.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.example.clean.architecture.User;
