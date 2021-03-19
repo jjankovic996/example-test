@@ -1,6 +1,6 @@
 package org.example.clean.architecture.security.services;
 
-import org.example.clean.architecture.UserBM;
+import org.example.clean.architecture.User;
 import org.example.clean.architecture.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +15,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		UserBM user = userRepository.findUserByUsername(username);
+		User user = userRepository.findByUsername(username);
 
 		return UserDetailsImpl.build(user);
 	}

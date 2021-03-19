@@ -1,14 +1,14 @@
 package org.example.clean.architecture.repository;
 
-import org.example.clean.architecture.UserBM;
+import org.example.clean.architecture.User;
 
 public interface UserRepository {
 
-    UserBM findUserByUsername(String username);
+    User findByUsername(String username);
 
-    Boolean doesUserExistByUsername(String username);
+    Integer countByUsername(String username);
 
-    Boolean doesUserExistByEmail(String email);
+    Integer countByEmail(String email);
 
-    UserBM  save(UserBM userBM);
+    User  save(User user);
 }

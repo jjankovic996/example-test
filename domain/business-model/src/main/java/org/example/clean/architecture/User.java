@@ -1,4 +1,4 @@
-package org.example.clean.architecture.repository.model;
+package org.example.clean.architecture;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

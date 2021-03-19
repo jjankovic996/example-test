@@ -44,7 +44,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> register(@Valid @RequestBody SignupRequest signUpRequest) throws Exception{
-        return ResponseEntity.ok(registerUserCase.register(signupMapper.toUserBM(signUpRequest)));
+        return ResponseEntity.ok(registerUserCase.register(signupMapper.toUser(signUpRequest)));
     }
 
     @PostMapping("/signin")

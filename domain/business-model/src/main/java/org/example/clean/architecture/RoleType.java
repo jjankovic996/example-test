@@ -1,6 +1,6 @@
 package org.example.clean.architecture;
 
-public enum RoleTypeBM {
+public enum RoleType {
     ROLE_USER,
     ROLE_ADMIN
 }

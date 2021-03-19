@@ -1,67 +1,73 @@
 package org.example.clean.architecture.usecase;
 
-import org.example.clean.architecture.RoleBM;
-import org.example.clean.architecture.UserBM;
+import lombok.extern.slf4j.Slf4j;
+import org.example.clean.architecture.Role;
+import org.example.clean.architecture.RoleType;
+import org.example.clean.architecture.User;
 import org.example.clean.architecture.exception.RegisterException;
+import org.example.clean.architecture.repository.RoleRepository;
 import org.example.clean.architecture.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import  static org.example.clean.architecture.RoleTypeBM.ROLE_USER;
-import  static org.example.clean.architecture.RoleTypeBM.ROLE_ADMIN;
-
 import java.util.HashSet;
 import java.util.Set;
 
 @Service
+@Slf4j
 public class RegisterService implements RegisterUserCase{
-
-    private static final RoleBM ADMIN = new RoleBM(ROLE_ADMIN);
-    private static final RoleBM USER = new RoleBM(ROLE_USER);
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Autowired
     public RegisterService(UserRepository userRepository,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
-    public UserBM register(UserBM userBM) throws RegisterException {
-        if (userRepository.doesUserExistByUsername(userBM.getUsername())) {
+    public User register(User user) throws RegisterException {
+
+        if (userRepository.countByUsername(user.getUsername()) != 0) {
             throw new RegisterException("Username already exists");
         }
 
-        if (userRepository.doesUserExistByEmail(userBM.getEmail())) {
+        if (userRepository.countByEmail(user.getEmail()) != 0) {
             throw new RegisterException("Username already exists");
         }
 
+        User newUser = new User(user.getUsername(), user.getEmail(), passwordEncoder.encode(user.getPassword()));
 
-        UserBM user = new UserBM(userBM.getUsername(), userBM.getEmail(),
-                passwordEncoder.encode(userBM.getPassword()));
+        Set<Role> roles = setRolesForUser(newUser, user.getRoles());
 
-        Set<RoleBM> roles = new HashSet<>();
+        newUser.setRoles(roles);
+        userRepository.save(newUser);
 
-        if (userBM.getRoles() == null || userBM.getRoles().size() == 0) {
-            roles.add(USER);
+        return newUser;
+    }
+
+    private Set<Role> setRolesForUser(User newUser, Set<Role> requestRoles){
+        Set<Role> roles = new HashSet<>();
+
+        if (requestRoles == null || requestRoles.size() == 0) {
+            Role role = roleRepository.findById(2).get();
+            roles.add(role);
         } else {
-            userBM.getRoles().forEach(role -> {
+            requestRoles.forEach(roleRequest -> {
+                String roleType = roleRequest.getName().name();
+                System.out.println(roleType);
 
-                if (role.equals(ROLE_ADMIN.name())) {
-                    roles.add(ADMIN);
-                }else{
-                    roles.add(USER);
-                }
-
+                Role role = roleType.equals(RoleType.ROLE_ADMIN.name()) ? roleRepository.findById(1).get(): roleRepository.findById(2).get();
+                System.out.println(roleType.equals(RoleType.ROLE_ADMIN.name()));
+                roles.add(role);
             });
         }
 
-        user.setRoles(roles);
-        userRepository.save(user);
-
-        return user;
+        return roles;
     }
 }

@@ -4,15 +4,15 @@ import org.example.clean.architecture.JwtToken;
 import org.example.clean.architecture.security.jwt.JwtUtils;
 import org.example.clean.architecture.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AuthenticateService implements AuthenticateUseCase {
@@ -35,9 +35,11 @@ public class AuthenticateService implements AuthenticateUseCase {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+        List<String> roles = new ArrayList<>();
+        for (GrantedAuthority item : userDetails.getAuthorities()) {
+            String authority = item.getAuthority();
+            roles.add(authority);
+        }
 
         return new JwtToken(jwt,
                 userDetails.getUsername(),
