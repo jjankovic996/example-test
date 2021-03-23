@@ -1,15 +1,14 @@
 package org.example.clean.architecture.rest.controller;
 
 import org.example.clean.architecture.JwtToken;
-import org.example.clean.architecture.rest.request.LoginRequest;
-import org.example.clean.architecture.rest.request.SignupRequest;
 import org.example.clean.architecture.rest.mapper.LoginMapper;
 import org.example.clean.architecture.rest.mapper.SignupMapper;
-import org.example.clean.architecture.rest.service.AuthenticateUseCase;
+import org.example.clean.architecture.rest.request.LoginRequest;
+import org.example.clean.architecture.rest.request.SignupRequest;
+import org.example.clean.architecture.usecase.AuthenticateUseCase;
 import org.example.clean.architecture.usecase.RegisterUserCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,11 +34,6 @@ public class AuthController {
         this.authenticateUseCase = authenticateUseCase;
         this.signupMapper = signupMapper;
         this.loginMapper = loginMapper;
-    }
-
-    @GetMapping
-    public String test(){
-        return "jelena";
     }
 
     @PostMapping("/signup")

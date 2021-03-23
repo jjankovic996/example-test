@@ -1,4 +1,4 @@
-package org.example.clean.architecture.usecase;
+package org.example.clean.architecture.rest.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.clean.architecture.Role;
@@ -7,6 +7,7 @@ import org.example.clean.architecture.User;
 import org.example.clean.architecture.exception.RegisterException;
 import org.example.clean.architecture.repository.RoleRepository;
 import org.example.clean.architecture.repository.UserRepository;
+import org.example.clean.architecture.usecase.RegisterUserCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.util.Set;
 
 @Service
 @Slf4j
-public class RegisterService implements RegisterUserCase{
+public class RegisterService implements RegisterUserCase {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -41,17 +42,15 @@ public class RegisterService implements RegisterUserCase{
             throw new RegisterException("Username already exists");
         }
 
-        User newUser = new User(user.getUsername(), user.getEmail(), passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        setRolesForUser(user, user.getRoles());
 
-        Set<Role> roles = setRolesForUser(newUser, user.getRoles());
+        user = userRepository.save(user);
 
-        newUser.setRoles(roles);
-        userRepository.save(newUser);
-
-        return newUser;
+        return user;
     }
 
-    private Set<Role> setRolesForUser(User newUser, Set<Role> requestRoles){
+    private void setRolesForUser(User user, Set<Role> requestRoles){
         Set<Role> roles = new HashSet<>();
 
         if (requestRoles == null || requestRoles.size() == 0) {
@@ -66,6 +65,6 @@ public class RegisterService implements RegisterUserCase{
             });
         }
 
-        return roles;
+        user.setRoles(roles);
     }
 }

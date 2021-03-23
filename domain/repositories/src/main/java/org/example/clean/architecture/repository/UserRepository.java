@@ -4,7 +4,7 @@ import org.example.clean.architecture.User;
 
 public interface UserRepository {
 
-    User findByUsername(String username);
+    User findByEmail(String email);
 
     Integer countByUsername(String username);
 

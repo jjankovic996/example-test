@@ -1,4 +1,4 @@
-package org.example.clean.architecture.rest.service;
+package org.example.clean.architecture.usecase;
 
 import org.example.clean.architecture.JwtToken;
 
