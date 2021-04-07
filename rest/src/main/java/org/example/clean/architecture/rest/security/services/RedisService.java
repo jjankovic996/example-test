@@ -11,12 +11,10 @@ import java.util.concurrent.TimeUnit;
 public class RedisService {
 
     private final RedisTemplate template;
-    private final JwtUtils jwtUtils;
 
     @Autowired
-    public RedisService(RedisTemplate template, JwtUtils jwtUtils){
+    public RedisService(RedisTemplate template){
         this.template = template;
-        this.jwtUtils = jwtUtils;
     }
 
     public void blacklistToken(String token){

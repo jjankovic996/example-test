@@ -5,19 +5,19 @@ import org.example.clean.architecture.rest.mapper.LoginMapper;
 import org.example.clean.architecture.rest.mapper.SignupMapper;
 import org.example.clean.architecture.rest.request.LoginRequest;
 import org.example.clean.architecture.rest.request.SignupRequest;
+import org.example.clean.architecture.rest.security.jwt.JwtUtils;
 import org.example.clean.architecture.rest.security.services.RedisService;
 import org.example.clean.architecture.usecase.AuthenticateUseCase;
 import org.example.clean.architecture.usecase.RegisterUserCase;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -29,18 +29,21 @@ public class AuthController {
     private final SignupMapper signupMapper;
     private final LoginMapper loginMapper;
     private final RedisService redisService;
+    private final JwtUtils jwtUtils;
 
     @Autowired
     public AuthController(RegisterUserCase registerUserCase,
                           AuthenticateUseCase authenticateUseCase,
                           SignupMapper signupMapper,
                           LoginMapper loginMapper,
-                          RedisService redisService) {
+                          RedisService redisService,
+                          JwtUtils jwtUtils) {
         this.registerUserCase = registerUserCase;
         this.authenticateUseCase = authenticateUseCase;
         this.signupMapper = signupMapper;
         this.loginMapper = loginMapper;
         this.redisService = redisService;
+        this.jwtUtils = jwtUtils;
     }
 
     @PostMapping("/signup")
@@ -55,14 +58,9 @@ public class AuthController {
     }
 
     @GetMapping
-    public ResponseEntity<?> logout(@RequestHeader  HttpHeaders headers){
-        redisService.blacklistToken(extractToken(headers));
+    public ResponseEntity<?> logout(HttpServletRequest request){
+        redisService.blacklistToken(jwtUtils.parseJwt(request));
         return ResponseEntity.ok().build();
-    }
-
-    private String extractToken(HttpHeaders headers){
-        String bearerToken = headers.get("authorization").get(0);
-        return bearerToken.substring(7);
     }
 
 }

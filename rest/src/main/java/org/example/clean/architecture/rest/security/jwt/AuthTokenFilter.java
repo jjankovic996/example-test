@@ -34,11 +34,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
-			String jwt = parseJwt(request);
+			String jwt = jwtUtils.parseJwt(request);
 			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
 				String email = jwtUtils.getEmailFromJwtToken(jwt);
 				checkToken(jwt);
-				jwtUtils.getExpirationFromJwtToken(jwt);
 				UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
@@ -53,23 +52,16 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
-	private String parseJwt(HttpServletRequest request) {
-		String headerAuth = request.getHeader("Authorization");
-
-		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-			return headerAuth.substring(7);
-		}
-
-		return null;
-	}
-
-	public void checkToken(String token) throws RegisterException{
+	private void checkToken(String token) throws RegisterException {
 		Boolean blacklistedToken = redisService.isTokenBlackListed(token);
-		if(blacklistedToken == null){
+
+		if(blacklistedToken.equals(Boolean.FALSE)){
 			return;
 		}
-		if(blacklistedToken.equals(Boolean.TRUE)){
-			throw new RegisterException("Token is not valid");
-		}
+
+		throw new RegisterException("Token is not valid");
+
 	}
+
+
 }

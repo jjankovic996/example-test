@@ -7,12 +7,17 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
+import org.example.clean.architecture.exception.RegisterException;
+import org.example.clean.architecture.rest.security.services.RedisService;
 import org.example.clean.architecture.rest.security.services.UserDetailsImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.time.temporal.TemporalAmount;
 import java.util.Date;
@@ -43,12 +48,6 @@ public class JwtUtils {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
 	}
 
-	public Date getExpirationFromJwtToken(String token) {
-		Instant expiry = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getExpiration().toInstant();
-		expiry.compareTo(Instant.now());
-		return new Date();
-	}
-
 	public boolean validateJwtToken(String authToken) {
 		try {
 			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
@@ -67,4 +66,16 @@ public class JwtUtils {
 
 		return false;
 	}
+
+	public String parseJwt(HttpServletRequest request) {
+		String headerAuth = request.getHeader("Authorization");
+
+		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+			return headerAuth.substring(7);
+		}
+
+		return null;
+	}
+
+
 }
