@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.time.Instant;
+import java.time.temporal.TemporalAmount;
 import java.util.Date;
 
 @Slf4j
@@ -36,8 +39,14 @@ public class JwtUtils {
 				.compact();
 	}
 
-	public String getUserNameFromJwtToken(String token) {
+	public String getEmailFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+	}
+
+	public Date getExpirationFromJwtToken(String token) {
+		Instant expiry = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getExpiration().toInstant();
+		expiry.compareTo(Instant.now());
+		return new Date();
 	}
 
 	public boolean validateJwtToken(String authToken) {

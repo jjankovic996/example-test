@@ -40,17 +40,18 @@ public class TestController {
     public String testAll(){
         return "Anyone can see this.";
     }
-    @GetMapping("/redis/{key}/{value}")
-    public ResponseEntity<?> testRedisPostUser(@PathVariable String key, @PathVariable String value){
-        service.setValue(key,value);
-        return ResponseEntity.ok().build();
-    }
 
-    @GetMapping("/redis/{key}")
-    public ResponseEntity<?> testRedisGetUser(@PathVariable String key){
-        Object o = service.getValue(key);
-        return ResponseEntity.ok(o);
-    }
+//    @GetMapping("/redis/{key}/{value}")
+//    public ResponseEntity<?> testRedisPostUser(@PathVariable String key, @PathVariable String value){
+//        service.blacklistToken(key,value);
+//        return ResponseEntity.ok().build();
+//    }
+//
+//    @GetMapping("/redis/{key}")
+//    public ResponseEntity<?> testRedisGetUser(@PathVariable String key){
+//        Object o = service.getBlacklistedToken(key);
+//        return ResponseEntity.ok(o);
+//    }
 
 
 

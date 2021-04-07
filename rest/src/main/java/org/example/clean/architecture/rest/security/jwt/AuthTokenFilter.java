@@ -2,6 +2,8 @@ package org.example.clean.architecture.rest.security.jwt;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.clean.architecture.exception.RegisterException;
+import org.example.clean.architecture.rest.security.services.RedisService;
 import org.example.clean.architecture.rest.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,15 +27,19 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	@Autowired
 	private UserDetailsServiceImpl userDetailsService;
 
+	@Autowired
+	private RedisService redisService;
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
 			String jwt = parseJwt(request);
 			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-				String username = jwtUtils.getUserNameFromJwtToken(jwt);
-
-				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+				String email = jwtUtils.getEmailFromJwtToken(jwt);
+				checkToken(jwt);
+				jwtUtils.getExpirationFromJwtToken(jwt);
+				UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -55,5 +61,15 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		}
 
 		return null;
+	}
+
+	public void checkToken(String token) throws RegisterException{
+		Boolean blacklistedToken = redisService.isTokenBlackListed(token);
+		if(blacklistedToken == null){
+			return;
+		}
+		if(blacklistedToken.equals(Boolean.TRUE)){
+			throw new RegisterException("Token is not valid");
+		}
 	}
 }
