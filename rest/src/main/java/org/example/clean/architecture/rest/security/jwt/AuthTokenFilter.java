@@ -21,6 +21,7 @@ import java.io.IOException;
 
 @Slf4j
 public class AuthTokenFilter extends OncePerRequestFilter {
+
 	@Autowired
 	private JwtUtils jwtUtils;
 
@@ -55,7 +56,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	private void checkToken(String token) throws RegisterException {
 		Boolean blacklistedToken = redisService.isTokenBlackListed(token);
 
-		if(blacklistedToken.equals(Boolean.FALSE)){
+		if(blacklistedToken == null || blacklistedToken.equals(Boolean.FALSE)){
 			return;
 		}
 
